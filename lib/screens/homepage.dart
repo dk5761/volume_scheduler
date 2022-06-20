@@ -15,7 +15,13 @@ class HomePage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: ListView.builder(
             itemBuilder: (context, index) {
-              return ScheduleTile();
+              return const ScheduleTile();
+              // const ClipRRect(
+              // borderRadius: BorderRadius.only(
+              // topLeft: Radius.circular(32),
+              // bottomLeft: Radius.circular(32),
+              // ),
+              // child:
             },
             itemCount: 2,
           )),

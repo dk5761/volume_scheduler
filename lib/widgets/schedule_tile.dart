@@ -19,6 +19,8 @@ class _ScheduleTileState extends State<ScheduleTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+      tileColor: Colors.white,
       title: const Text(
         "Office",
         style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),

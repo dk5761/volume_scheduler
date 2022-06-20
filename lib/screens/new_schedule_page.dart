@@ -10,8 +10,10 @@ class NewSchedulePage extends StatefulWidget {
 
 class _NewSchedulePageState extends State<NewSchedulePage> {
   TimeOfDay selectedTime = TimeOfDay.now();
-  late TextEditingController _textEditingController = TextEditingController();
+  late final TextEditingController _textEditingController =
+      TextEditingController();
   RingerMode _ringerMode = RingerMode.normal;
+  String title = "default";
 
   _selectTime(BuildContext context) async {
     final TimeOfDay? timeOfDay = await showTimePicker(
@@ -74,7 +76,7 @@ class _NewSchedulePageState extends State<NewSchedulePage> {
             controller: _textEditingController,
             decoration: const InputDecoration(border: OutlineInputBorder()),
             onChanged: (value) {
-              print(value);
+              title = value;
             },
           ),
           const SizedBox(
@@ -98,7 +100,7 @@ class _NewSchedulePageState extends State<NewSchedulePage> {
                   _ringerMode = value!;
                 });
               }),
-          ElevatedButton(onPressed: () {}, child: Text("Save"))
+          ElevatedButton(onPressed: () {}, child: const Text("Save"))
         ]),
       ),
     );

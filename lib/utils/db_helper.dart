@@ -1,6 +1,9 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite/sqflite.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
+
+final db_provider = Provider(((ref) => DBHelper));
 
 class DBHelper {
   static Future database() async {
