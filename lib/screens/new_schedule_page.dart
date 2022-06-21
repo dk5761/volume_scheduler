@@ -44,7 +44,10 @@ class _NewSchedulePageState extends ConsumerState<NewSchedulePage> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = ref.watch(dbProvider);
+    final provider = ref.watch(dbProvider).insert({
+      "title": "this is test",
+      "mode": RingerMode.silent,
+    });
 
     return Scaffold(
       appBar: AppBar(
