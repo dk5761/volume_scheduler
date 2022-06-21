@@ -1,14 +1,17 @@
 import 'package:daily_volume_controller/utils/data.dart';
+import 'package:daily_volume_controller/utils/db_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NewSchedulePage extends StatefulWidget {
+class NewSchedulePage extends ConsumerStatefulWidget {
   const NewSchedulePage({Key? key}) : super(key: key);
 
   @override
-  State<NewSchedulePage> createState() => _NewSchedulePageState();
+  // ignore: library_private_types_in_public_api
+  _NewSchedulePageState createState() => _NewSchedulePageState();
 }
 
-class _NewSchedulePageState extends State<NewSchedulePage> {
+class _NewSchedulePageState extends ConsumerState<NewSchedulePage> {
   TimeOfDay selectedTime = TimeOfDay.now();
   late final TextEditingController _textEditingController =
       TextEditingController();
@@ -41,6 +44,8 @@ class _NewSchedulePageState extends State<NewSchedulePage> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = ref.watch(dbProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("New Scheduler"),
