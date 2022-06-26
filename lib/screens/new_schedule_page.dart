@@ -1,7 +1,10 @@
+import 'package:daily_volume_controller/providers/dbDataProvider.dart';
 import 'package:daily_volume_controller/utils/data.dart';
 import 'package:daily_volume_controller/utils/db_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../utils/functions.dart';
 
 class NewSchedulePage extends ConsumerStatefulWidget {
   const NewSchedulePage({Key? key}) : super(key: key);
@@ -31,6 +34,12 @@ class _NewSchedulePageState extends ConsumerState<NewSchedulePage> {
     }
   }
 
+  DateTime _convertToDateTime() {
+    final now = DateTime.now();
+    return DateTime(
+        now.year, now.month, now.day, selectedTime.hour, selectedTime.minute);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -44,30 +53,47 @@ class _NewSchedulePageState extends ConsumerState<NewSchedulePage> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = ref.watch(dbProvider).insert({
-      "title": "this is test",
-      "mode": RingerMode.silent,
-    });
+    final provider = ref.watch(dataProvider);
+
+    Future<void> saveToDb() async {
+      provider.addSchedule(title, _convertToDateTime(), _ringerMode);
+      Navigator.pop(context);
+    }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("New Scheduler"),
+        iconTheme: const IconThemeData(
+          color: Colors.black, //change your color here
+        ),
+        title: const Text(
+          "New Schedule",
+          style: TextStyle(color: Colors.black),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.white,
       ),
       body: Container(
+        color: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(
             children: [
-              ElevatedButton(
+              TextButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.black54)),
                 onPressed: () {
                   _selectTime(context);
                 },
-                child: const Text("Choose Time"),
+                child: const Text(
+                  "Choose Time",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
               const SizedBox(
                 width: 20,
               ),
-              Text("${selectedTime.hour}:${selectedTime.minute}"),
+              Text(selectedTime.format(context).toString()),
             ],
           ),
           const SizedBox(
@@ -108,7 +134,16 @@ class _NewSchedulePageState extends ConsumerState<NewSchedulePage> {
                   _ringerMode = value!;
                 });
               }),
-          ElevatedButton(onPressed: () {}, child: const Text("Save"))
+          TextButton(
+            style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.black54)),
+            onPressed: saveToDb,
+            child: const Text(
+              "Save",
+              style: TextStyle(color: Colors.white),
+            ),
+          )
         ]),
       ),
     );

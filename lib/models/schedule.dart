@@ -7,7 +7,7 @@ class Schedule {
     required this.mode,
   });
 
-  final String time;
+  final DateTime time;
   final String title;
   final RingerMode mode;
 

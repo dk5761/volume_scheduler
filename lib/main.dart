@@ -1,12 +1,13 @@
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:daily_volume_controller/screens/homepage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await AndroidAlarmManager.initialize();
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -16,10 +17,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+      themeMode: ThemeMode.dark,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          // primarySwatch: Colors.blue,
+          ),
       home: const HomePage(),
     );
   }
