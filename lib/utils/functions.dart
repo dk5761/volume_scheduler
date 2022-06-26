@@ -10,8 +10,8 @@ String convertModeToDbString(RingerMode ringer) {
       return 'silent';
     case RingerMode.vibrate:
       return 'vibrate';
-    case RingerMode.unknown:
-      return 'unknown';
+    // case RingerMode.unknown:
+    //   return 'unknown';
     default:
       return 'vibrate';
   }
@@ -25,8 +25,8 @@ RingerMode convertDbModeToRingerMode(String ringer) {
       return RingerMode.silent;
     case 'vibrate':
       return RingerMode.vibrate;
-    case 'unknown':
-      return RingerMode.unknown;
+    // case 'unknown':
+    //   return RingerMode.unknown;
     default:
       return RingerMode.vibrate;
   }

@@ -10,19 +10,22 @@ final dbProvider = Provider((ref) {
 });
 
 class DataBaseProvider {
-  static const tableName = 'schedule';
+  static const tableName = 'scheduleTable1';
 
   static Future database() async {
     final databasePath = await sql.getDatabasesPath();
-
-    return sql.openDatabase(path.join(databasePath, 'schedules2.db'),
+    print("inside");
+    return sql.openDatabase(path.join(databasePath, 'schedules.db'),
         onCreate: (db, version) {
       return db.execute('''CREATE TABLE IF NOT EXISTS $tableName (
-            id TEXT PRIMARY KEY,
+            id TEXT,
             title TEXT,
-            dt datetime, 
-            mode TEXT)''');
-    }, version: 1);
+            time TEXT, 
+            mode TEXT,
+            active INT,
+            volume INT
+            )''');
+    }, version: 2);
   }
 
   Future<void> insert(Map<String, Object> data) async {

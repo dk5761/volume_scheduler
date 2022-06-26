@@ -20,6 +20,7 @@ class _NewSchedulePageState extends ConsumerState<NewSchedulePage> {
       TextEditingController();
   RingerMode _ringerMode = RingerMode.normal;
   String title = "default";
+  double _currentSliderValue = 0;
 
   _selectTime(BuildContext context) async {
     final TimeOfDay? timeOfDay = await showTimePicker(
@@ -56,7 +57,8 @@ class _NewSchedulePageState extends ConsumerState<NewSchedulePage> {
     final provider = ref.watch(dataProvider);
 
     Future<void> saveToDb() async {
-      provider.addSchedule(title, _convertToDateTime(), _ringerMode);
+      provider.addSchedule(title, _convertToDateTime(), _ringerMode, true,
+          _currentSliderValue.toInt());
       Navigator.pop(context);
     }
 
@@ -134,6 +136,22 @@ class _NewSchedulePageState extends ConsumerState<NewSchedulePage> {
                   _ringerMode = value!;
                 });
               }),
+          const SizedBox(
+            height: 10,
+          ),
+          _ringerMode == RingerMode.normal
+              ? Slider(
+                  value: _currentSliderValue,
+                  max: 100,
+                  divisions: 10,
+                  label: _currentSliderValue.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _currentSliderValue = value;
+                    });
+                  },
+                )
+              : const SizedBox(),
           TextButton(
             style: ButtonStyle(
                 backgroundColor:

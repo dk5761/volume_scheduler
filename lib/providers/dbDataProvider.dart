@@ -24,25 +24,32 @@ class DataProvider with ChangeNotifier {
 
   List<Schedule> get items => [..._items];
 
-  void addSchedule(String title, DateTime dt, RingerMode ringer) {
-    final newSchedule = Schedule(title: title, time: dt, mode: ringer);
+  void addSchedule(
+      String title, DateTime dt, RingerMode ringer, bool active, int volume) {
+    final newSchedule = Schedule(
+        title: title, time: dt, mode: ringer, active: active, volume: volume);
     _items.add(newSchedule);
     notifyListeners();
     ref.read(dbProvider).insert({
+      'id': newSchedule.id.toString(),
       'title': newSchedule.title,
-      'dt': newSchedule.time.toString(),
-      'mode': convertModeToDbString(ringer)
+      'time': newSchedule.time.toString(),
+      'mode': convertModeToDbString(ringer),
+      'active': active ? 1 : 0,
+      'volume': volume
     });
   }
 
   Future<void> fetchAndSetData() async {
     final dataList = await ref.read(dbProvider).getData();
     _items = dataList.map((item) {
-      print(item);
       return Schedule(
+          id: item["id"],
           title: item['title'],
           mode: convertDbModeToRingerMode(item['mode']),
-          time: DateFormat("yyyy-MM-dd hh:mm:ss").parse(item['dt']));
+          time: DateFormat("yyyy-MM-dd hh:mm:ss").parse(item['time']),
+          volume: item["volume"],
+          active: item["active"] == 0 ? false : true);
     }).toList();
     notifyListeners();
   }

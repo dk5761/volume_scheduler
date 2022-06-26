@@ -14,7 +14,14 @@ class ScheduleTile extends StatefulWidget {
 }
 
 class _ScheduleTileState extends State<ScheduleTile> {
-  bool isSwitched = false;
+  late bool isSwitched;
+
+  @override
+  void initState() {
+    isSwitched = widget.item.active;
+    print(isSwitched);
+    super.initState();
+  }
 
   void toggleSwitch(bool value) {
     setState(() {
