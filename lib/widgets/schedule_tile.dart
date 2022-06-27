@@ -1,11 +1,11 @@
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:daily_volume_controller/models/schedule.dart';
 import 'package:daily_volume_controller/providers/dbDataProvider.dart';
-import 'package:daily_volume_controller/utils/data.dart';
 import 'package:daily_volume_controller/utils/functions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sound_mode/sound_mode.dart';
 
 class ScheduleTile extends ConsumerStatefulWidget {
@@ -16,6 +16,7 @@ class ScheduleTile extends ConsumerStatefulWidget {
   final int index;
 
   @override
+  // ignore: library_private_types_in_public_api
   _ScheduleTileState createState() => _ScheduleTileState();
 }
 
@@ -29,21 +30,29 @@ class _ScheduleTileState extends ConsumerState<ScheduleTile> {
     super.initState();
   }
 
-  void toggleSwitch(bool value) {
+  static void playAlarm(int id) async {
+    if (kDebugMode) {
+      print(id);
+    }
+    final prefs = await SharedPreferences.getInstance();
+    final mode = prefs.getString("id") ?? "";
+    SoundMode.setSoundMode(setRingerMode(mode));
+  }
+
+  void toggleSwitch(bool value) async {
     setState(() {
       isSwitched = value;
     });
 
-    ref
-        .read(dataProvider)
-        .updateTheSchedule(widget.item.id.toString(), {"active": isSwitched});
+    ref.read(dataProvider).updateTheSchedule(
+        widget.item.id.toString(), {"active": isSwitched ? 1 : 0});
 
-    if (value) {
-      AndroidAlarmManager.periodic(
-          const Duration(minutes: 1),
-          widget.index,
-          (callback) =>
-              {SoundMode.setSoundMode(setRingerMode(widget.item.mode))});
+    if (value == true) {
+      await AndroidAlarmManager.periodic(
+          const Duration(seconds: 5), widget.item.id!.toInt(), playAlarm,
+          startAt: widget.item.time);
+    } else {
+      await AndroidAlarmManager.cancel(widget.item.id!.toInt());
     }
   }
 

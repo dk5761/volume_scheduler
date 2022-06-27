@@ -1,5 +1,3 @@
-import 'package:daily_volume_controller/models/schedule.dart';
-import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // ignore: depend_on_referenced_packages
@@ -10,15 +8,15 @@ final dbProvider = Provider((ref) {
 });
 
 class DataBaseProvider {
-  static const tableName = 'scheduleTable1';
+  static const tableName = 'scheduleTable2';
 
   static Future database() async {
     final databasePath = await sql.getDatabasesPath();
-    print("inside");
+
     return sql.openDatabase(path.join(databasePath, 'schedules.db'),
         onCreate: (db, version) {
       return db.execute('''CREATE TABLE IF NOT EXISTS $tableName (
-            id TEXT PRIMARY KEY,
+            id INT PRIMARY KEY,
             title TEXT,
             time TEXT, 
             mode TEXT,

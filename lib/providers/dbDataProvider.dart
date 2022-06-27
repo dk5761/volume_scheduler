@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/functions.dart';
 
@@ -24,8 +25,8 @@ class DataProvider with ChangeNotifier {
 
   List<Schedule> get items => [..._items];
 
-  void addSchedule(
-      String title, DateTime dt, RingerMode ringer, bool active, int volume) {
+  void addSchedule(String title, DateTime dt, RingerMode ringer, bool active,
+      int volume) async {
     final newSchedule = Schedule(
         title: title, time: dt, mode: ringer, active: active, volume: volume);
     _items.add(newSchedule);
@@ -38,6 +39,10 @@ class DataProvider with ChangeNotifier {
       'active': active ? 1 : 0,
       'volume': volume
     });
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+        newSchedule.id.toString(), convertModeToDbString(ringer));
   }
 
   Future<void> fetchAndSetData() async {

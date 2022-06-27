@@ -1,5 +1,5 @@
 import 'package:daily_volume_controller/utils/data.dart';
-import 'package:uuid/uuid.dart';
+import 'package:flutter/cupertino.dart';
 
 class Schedule {
   Schedule({
@@ -10,10 +10,10 @@ class Schedule {
     required this.active,
     required this.volume,
   }) {
-    id = id ?? const Uuid().v4();
+    id = id ?? UniqueKey().hashCode;
   }
 
-  String? id;
+  int? id;
   final DateTime time;
   final String title;
   final RingerMode mode;
