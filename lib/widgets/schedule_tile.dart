@@ -1,25 +1,31 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:daily_volume_controller/models/schedule.dart';
+import 'package:daily_volume_controller/providers/dbDataProvider.dart';
 import 'package:daily_volume_controller/utils/data.dart';
 import 'package:daily_volume_controller/utils/functions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sound_mode/sound_mode.dart';
 
-class ScheduleTile extends StatefulWidget {
-  const ScheduleTile({Key? key, required this.item}) : super(key: key);
+class ScheduleTile extends ConsumerStatefulWidget {
+  const ScheduleTile({Key? key, required this.item, required this.index})
+      : super(key: key);
 
   final Schedule item;
+  final int index;
 
   @override
-  State<ScheduleTile> createState() => _ScheduleTileState();
+  _ScheduleTileState createState() => _ScheduleTileState();
 }
 
-class _ScheduleTileState extends State<ScheduleTile> {
+class _ScheduleTileState extends ConsumerState<ScheduleTile> {
   late bool isSwitched;
 
   @override
   void initState() {
     isSwitched = widget.item.active;
-    print(isSwitched);
+
     super.initState();
   }
 
@@ -27,6 +33,18 @@ class _ScheduleTileState extends State<ScheduleTile> {
     setState(() {
       isSwitched = value;
     });
+
+    ref
+        .read(dataProvider)
+        .updateTheSchedule(widget.item.id.toString(), {"active": isSwitched});
+
+    if (value) {
+      AndroidAlarmManager.periodic(
+          const Duration(minutes: 1),
+          widget.index,
+          (callback) =>
+              {SoundMode.setSoundMode(setRingerMode(widget.item.mode))});
+    }
   }
 
   @override

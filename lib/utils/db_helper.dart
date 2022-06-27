@@ -18,7 +18,7 @@ class DataBaseProvider {
     return sql.openDatabase(path.join(databasePath, 'schedules.db'),
         onCreate: (db, version) {
       return db.execute('''CREATE TABLE IF NOT EXISTS $tableName (
-            id TEXT,
+            id TEXT PRIMARY KEY,
             title TEXT,
             time TEXT, 
             mode TEXT,
@@ -38,6 +38,11 @@ class DataBaseProvider {
     final db = await DataBaseProvider.database();
 
     return await db.query(tableName);
+  }
+
+  Future<void> update(String id, Map<String, dynamic> data) async {
+    final db = await DataBaseProvider.database();
+    await db.update(tableName, data, where: 'id = ?', whereArgs: [id]);
   }
 
   Future<void> delete(String id) async {

@@ -26,7 +26,10 @@ class HomePage extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: ListView.builder(
                 itemBuilder: (context, index) {
-                  return ScheduleTile(item: provider.items[index]);
+                  return ScheduleTile(
+                    item: provider.items[index],
+                    index: index,
+                  );
                 },
                 itemCount: provider.items.length,
               ))

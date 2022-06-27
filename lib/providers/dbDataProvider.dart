@@ -53,4 +53,8 @@ class DataProvider with ChangeNotifier {
     }).toList();
     notifyListeners();
   }
+
+  Future<void> updateTheSchedule(String id, Map<String, dynamic> data) async {
+    return await ref.read(dbProvider).update(id, data);
+  }
 }
